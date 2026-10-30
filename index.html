@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emilly, meu bem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,500&family=Great+Vibes&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fundo: #fdf6f3;
+    --fundo2: #f8e6e4;
+    --rosa: #d98b98;
+    --rosa-claro: #f2c9cf;
+    --rosa-escuro: #a8546a;
+    --dourado: #c9a063;
+    --texto: #5b3a44;
+    --texto-suave: #8d6b75;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: linear-gradient(180deg, var(--fundo) 0%, var(--fundo2) 100%) fixed;
+    color: var(--texto);
+    font-family: 'Jost', sans-serif; font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  #progresso { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: linear-gradient(90deg, var(--rosa), var(--dourado)); z-index: 50; }
+
+  /* petalas e coracoes flutuando */
+  #flutuantes { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+  .flut { position: absolute; bottom: -40px; color: var(--rosa-claro); opacity: 0; animation: subir linear infinite; }
+  @keyframes subir {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: .7; }
+    100% { transform: translateY(-115vh) rotate(30deg); opacity: 0; }
+  }
+
+  .script { font-family: 'Great Vibes', cursive; }
+  .serif { font-family: 'Cormorant Garamond', serif; }
+
+  .revela { opacity: 0; transform: translateY(36px); transition: opacity 1s ease, transform 1s ease; }
+  .revela.visivel { opacity: 1; transform: none; }
+  .atraso1 { transition-delay: .2s; }
+  .atraso2 { transition-delay: .4s; }
+
+  /* capa */
+  .capa { min-height: 80vh; }
+  .capa, .final { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6vh 8vw; position: relative; z-index: 2; }
+  .capa .peq { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 4vw, 1.8rem); color: var(--texto-suave); }
+  .capa h1 { font-family: 'Great Vibes', cursive; font-weight: 400; font-size: clamp(4rem, 16vw, 9rem); color: var(--rosa-escuro); line-height: 1.05; margin: .3rem 0; }
+  .seta { margin-top: 3.5rem; font-size: 1.5rem; color: var(--rosa); animation: pulo 1.8s ease-in-out infinite; }
+  @keyframes pulo { 0%,100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
+
+  /* intro */
+  .intro { text-align: center; padding: 2vh 8vw 1vh; position: relative; z-index: 2; }
+  .intro p { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 5.5vw, 2.6rem); max-width: 640px; margin: 0 auto; line-height: 1.35; }
+  .intro em { color: var(--rosa-escuro); }
+
+  /* LINHA DO TEMPO */
+  .timeline { position: relative; max-width: 980px; margin: 0 auto; padding: 2vh 6vw 2vh; z-index: 2; }
+  .trilho { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: rgba(217,139,152,.25); transform: translateX(-50%); }
+  .trilho-fill { position: absolute; top: 0; left: 0; width: 100%; height: 0; background: linear-gradient(180deg, var(--rosa), var(--dourado)); }
+
+  .momento { position: relative; width: 50%; padding: 0 3rem 3rem 0; }
+  .momento:nth-of-type(even) { margin-left: 50%; padding: 0 0 3rem 3rem; }
+  .ponto {
+    position: absolute; top: 1.2rem; right: -9px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--fundo); border: 3px solid var(--rosa); box-shadow: 0 0 0 6px rgba(217,139,152,.18);
+  }
+  .momento:nth-of-type(even) .ponto { right: auto; left: -9px; }
+
+  .periodo { font-family: 'Great Vibes', cursive; font-size: clamp(2rem, 6vw, 2.8rem); color: var(--rosa-escuro); margin-bottom: .6rem; }
+  .moldura { background: #fff; padding: 10px 10px 14px; box-shadow: 0 14px 40px rgba(168,84,106,.18); border-radius: 4px; transform: rotate(-1.5deg); }
+  .momento:nth-of-type(even) .moldura { transform: rotate(1.5deg); }
+  .moldura img, .moldura .vazio { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; border-radius: 2px; }
+  .moldura .vazio { background: linear-gradient(135deg, var(--rosa-claro), var(--fundo2)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 3rem; }
+  .frase-momento { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.25rem, 4.2vw, 1.7rem); line-height: 1.45; margin-top: 1.1rem; color: var(--texto); }
+  .frase-momento em { color: var(--rosa-escuro); }
+
+  /* mobile: linha fica na esquerda */
+  @media (max-width: 720px) {
+    .trilho { left: 14px; transform: none; }
+    .timeline { padding-left: 12vw; padding-right: 6vw; }
+    .momento, .momento:nth-of-type(even) { width: 100%; margin-left: 0; padding: 0 0 2.5rem 1.6rem; }
+    .ponto, .momento:nth-of-type(even) .ponto { left: -9px; right: auto; }
+    .timeline { padding-left: 38px; }
+    .trilho { left: 24px; }
+    .ponto, .momento:nth-of-type(even) .ponto { left: -22px; }
+  }
+
+
+  /* carrossel */
+  .carrossel { position: relative; }
+  .faixa { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 2px; }
+  .faixa::-webkit-scrollbar { display: none; }
+  .faixa img { flex: 0 0 100%; scroll-snap-align: center; }
+  .seta-c { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; border: none; background: rgba(255,255,255,.85); color: var(--rosa-escuro); font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+  .seta-c.ant { left: 8px; } .seta-c.prox { right: 8px; }
+  .pontos { display: flex; justify-content: center; gap: 7px; padding-top: 10px; }
+  .pontos i { width: 7px; height: 7px; border-radius: 50%; background: var(--rosa-claro); transition: all .3s; }
+  .pontos i.ativo { background: var(--rosa); width: 18px; border-radius: 6px; }
+
+  /* contador */
+  .contador-sec { text-align: center; padding: 3vh 8vw 4vh; position: relative; z-index: 2; }
+  .contador-sec p.t { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 5vw, 2.2rem); }
+  .contador { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.8rem; }
+  .contador div { min-width: 90px; }
+  .contador strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 9vw, 3.8rem); color: var(--rosa-escuro); font-weight: 500; }
+  .contador span { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--texto-suave); }
+
+  /* final */
+  .carta em { color: var(--rosa-escuro); }
+  .carta { max-width: 620px; padding: 3rem 2rem; background: rgba(255,255,255,.7); border: 1px solid var(--rosa-claro); border-radius: 6px; box-shadow: 0 16px 50px rgba(168,84,106,.12); font-family: 'Cormorant Garamond', serif; font-size: clamp(1.25rem, 4.3vw, 1.8rem); line-height: 1.6; }
+  .assinatura { font-family: 'Great Vibes', cursive; font-size: 2.6rem; color: var(--rosa-escuro); margin-top: 1.4rem; }
+  .coracao-grande { font-size: 3.2rem; color: var(--rosa); display: inline-block; margin-bottom: 1.4rem; animation: batida 1.4s ease-in-out infinite; }
+  @keyframes batida { 0%,100% { transform: scale(1); } 20% { transform: scale(1.2); } 40% { transform: scale(1); } 60% { transform: scale(1.15); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .revela { transition: none; opacity: 1; transform: none; }
+    .flut, .seta, .coracao-grande { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progresso"></div>
+<div id="flutuantes"></div>
+
+<!-- CAPA -->
+<header class="capa">
+  <div class="revela">
+    <p class="peq">Dois anos de nós</p>
+    <h1>Emilly</h1>
+    <p class="peq">Meu bem, role com carinho e vem relembrar</p>
+  </div>
+  <div class="seta">&#8595;</div>
+</header>
+
+<!-- INTRO -->
+<div class="intro">
+  <p class="revela">Cada foto é um pedacinho da nossa história. E ainda tem tanto <em>pra viver</em>.</p>
+</div>
+
+<!-- LINHA DO TEMPO (preenchida pelo script abaixo) -->
+<main class="timeline" id="timeline">
+  <div class="trilho"><div class="trilho-fill" id="trilho-fill"></div></div>
+</main>
+
+<!-- CONTADOR -->
+<section class="contador-sec">
+  <p class="t revela">E de lá pra cá, já são...</p>
+  <div class="contador revela atraso1">
+    <div><strong id="c-dias">0</strong><span>dias</span></div>
+    <div><strong id="c-horas">0</strong><span>horas</span></div>
+    <div><strong id="c-min">0</strong><span>minutos</span></div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final">
+  <div class="coracao-grande revela">&#10084;</div>
+  <div class="carta revela atraso1">
+    <p>Não imagino minha vida sem você. O único arrependimento que tenho é de não ter te encontrado antes. Hoje minha vida é uma paz que nunca pensei que teria. Esses dois anos são só uma fração do que ainda vamos viver juntos. Quero viver no mínimo <em>100 anos</em> ao seu lado.</p>
+    <div class="assinatura">Te amo, meu bem</div>
+  </div>
+  <p class="revela atraso2" style="margin-top:2rem;color:var(--texto-suave)">Feliz dois anos &#10084;</p>
+</section>
+
+<script>
+  /* ==========================================================
+     AQUI VOCÊ EDITA A LINHA DO TEMPO.
+     Cada bloco é um período: período (título), foto e frase.
+     Pra adicionar um momento, copie um bloco e cole no fim.
+     Foto vazia ("") mostra um espaço rosado no lugar.
+     ========================================================== */
+  const momentos = [
+    { periodo: "", foto: "fotos/01.jpg", frase: "Aqui eu ainda nem imaginava o que a gente iria <em>viver juntos</em>." },
+    { periodo: "", foto: "fotos/02.jpg", frase: "Essa é a <em>carruagem</em> que me levou até você pela primeira vez." },
+    { periodo: "", foto: "fotos/03.jpg", frase: "Aquele foi o banco que você ficou me olhando <em>empurrar o carro</em> pra fazer ele pegar. 🌚" },
+    { periodo: "", foto: "fotos/04.jpg", frase: "Esse dia a gente comprou um monte de cerveja ruim, mas mesmo assim eu tava feliz <em>porque estava com você</em>. ❤️" },
+    { periodo: "", foto: "fotos/05.jpg", frase: "Aqui você me mostrou pela primeira vez sua <em>incrível habilidade</em> de comer caranguejo." },
+    { periodo: "", foto: "fotos/06.jpg", frase: "Aqui sou eu na boleia de um caminhão, com um monte de saco de lixo com minhas coisas e <em>um sonho de viver ao seu lado pra sempre</em>." },
+    { periodo: "", fotos: ["fotos/07a.jpg","fotos/07b.jpg","fotos/07c.jpg","fotos/07d.jpg"], frase: "Aqui foi nossa primeira viagem, pra Salvador. <em>Foi incrível!</em>" },
+    { periodo: "", foto: "fotos/08.jpg", frase: "Aqui é uma foto da minha antiga geladeira. Eu tirei pra anunciar na OLX porque tomamos a melhor decisão, <em>a de morar juntinhos</em> 😍" },
+    { periodo: "", fotos: ["fotos/09a.jpg","fotos/09b.jpg"], frase: "Ô época boa, São João! <em>Com você, melhor ainda!</em>" },
+    { periodo: "", fotos: ["fotos/10a.jpg","fotos/10b.jpg"], frase: "Aqui você fez uma <em>festa de aniversário surpresa</em> pra mim. Foi um dos melhores aniversários que já tive. E por incrível que pareça, eu realmente não sabia de nada dessa festa kkkkk" },
+    { periodo: "", foto: "fotos/11.jpg", frase: "Aqui você me mostrando mais uma <em>habilidade sua</em>, a de comer um cento de salgado da Itabolos." },
+    { periodo: "", fotos: ["fotos/12a.jpg","fotos/12b.jpg"], frase: "Aqui, nossa <em>segunda viagem</em>, agora pro show de Henrique e Juliano. (Olhando as fotos, nem parece que eu tava mijando pelo lugar errado.)" },
+    { periodo: "", foto: "fotos/13.jpg", frase: "Na saúde e <em>na doença</em>!" },
+    { periodo: "", foto: "fotos/14.jpg", frase: "Essa aqui é só pra lembrar de como você é <em>linda</em>." },
+    { periodo: "", foto: "fotos/15.jpg", frase: "<em>1 ANOOOOOO!</em> Ainda te levei pra conhecer seu ídolo. (Foi nesse dia que o gordinho foi gerado 😜)" },
+    { periodo: "", foto: "fotos/16.jpg", frase: "Nós e o Papai Noel. O presente que pedi pra ele foi <em>passar o resto da vida com você</em>." },
+    { periodo: "", foto: "fotos/17.jpg", frase: "Aqui, nós de <em>modelo</em>. 😌" },
+    { periodo: "", foto: "fotos/18.jpg", frase: "Na saúde e <em>na doença</em>! (Agora foi minha vez kkkk)" },
+    { periodo: "", foto: "fotos/19.jpg", frase: "<em>Minha foto preferida da vida.</em> Nossa família completa em um dos dias mais felizes da minha vida. (Até o gordinho tá aí nessa foto, escondido na barriga kkkk.)" },
+    { periodo: "", foto: "fotos/20.jpg", frase: "E o cara só viu um vídeo no YouTube e <em>a foto ficou perfeita</em>. Eu sou bom de teoria kkkk" },
+    { periodo: "", foto: "fotos/21.jpg", frase: "Aposto que nem precisava bater com tanta força. Você tava batendo assim só pra me fazer medo e <em>mostrar quem manda</em>. (Funcionou 🌚😂)" },
+    { periodo: "", foto: "fotos/22.jpg", frase: "Nosso <em>último date</em> de café da manhã antes do gordinho nascer. E pra provar que você prefere pão com ovo do que salgado 😌" },
+    { periodo: "", foto: "fotos/23.jpg", frase: "Aqui nós assistindo o <em>jogo do Brasil</em>. Foi bem emocionante." },
+    { periodo: "", foto: "fotos/24.jpg", frase: "Aqui, nosso <em>último date</em> antes do gordinho nascer." },
+    { periodo: "", fotos: ["fotos/25.jpg","fotos/25a.jpg","fotos/25b.jpg","fotos/25c.jpg"], frase: "<em>Nascimento do gordinho!</em> 👶🏼❤️" },
+    { periodo: "", foto: "fotos/26.jpg", frase: "Agora minha galeria só tem foto do gordinho. Nossa vida só tem sido <em>cuidar da nossa família</em>." }
+  ];
+
+  // data do inicio do namoro (ano, mes-1, dia): mes de janeiro = 0, outubro = 9
+  const inicio = new Date(2024, 9, 30, 0, 0, 0);
+
+  /* ---------- daqui pra baixo não precisa mexer ---------- */
+  const tl = document.getElementById('timeline');
+  momentos.forEach(m => {
+    const el = document.createElement('article');
+    el.className = 'momento revela';
+    let midia;
+    if (m.fotos && m.fotos.length > 1) {
+      midia = `<div class="carrossel"><div class="faixa">${m.fotos.map(f => `<img src="${f}" alt="" loading="lazy">`).join('')}</div>
+        <button class="seta-c ant" aria-label="Foto anterior">&#8249;</button><button class="seta-c prox" aria-label="Próxima foto">&#8250;</button>
+        <div class="pontos">${m.fotos.map((_, i) => `<i class="${i === 0 ? 'ativo' : ''}"></i>`).join('')}</div></div>`;
+    } else {
+      const f = m.foto || (m.fotos && m.fotos[0]);
+      midia = f
+        ? `<img src="${f}" alt="${m.periodo}" loading="lazy" onerror="this.outerHTML='<div class=&quot;vazio&quot;>&#10084;</div>'">`
+        : `<div class="vazio">&#10084;</div>`;
+    }
+    el.innerHTML = `
+      <span class="ponto"></span>
+      ${m.periodo ? `<div class="periodo">${m.periodo}</div>` : ''}
+      <div class="moldura">${midia}</div>
+      <p class="frase-momento">${m.frase}</p>`;
+    tl.appendChild(el);
+    const faixa = el.querySelector('.faixa');
+    if (faixa) {
+      const pts = el.querySelectorAll('.pontos i');
+      const ir = d => faixa.scrollBy({ left: d * faixa.clientWidth, behavior: 'smooth' });
+      el.querySelector('.ant').onclick = () => ir(-1);
+      el.querySelector('.prox').onclick = () => ir(1);
+      faixa.addEventListener('scroll', () => {
+        const i = Math.round(faixa.scrollLeft / faixa.clientWidth);
+        pts.forEach((p, k) => p.classList.toggle('ativo', k === i));
+      }, { passive: true });
+    }
+  });
+
+  // aparecer ao rolar
+  const obs = new IntersectionObserver((entradas) => {
+    entradas.forEach(e => { if (e.isIntersecting) e.target.classList.add('visivel'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.revela').forEach(el => obs.observe(el));
+
+  // progresso da pagina + linha do tempo se preenchendo
+  const barra = document.getElementById('progresso');
+  const fill = document.getElementById('trilho-fill');
+  function aoRolar() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    barra.style.width = (scrollY / max * 100) + '%';
+    const r = tl.getBoundingClientRect();
+    const total = r.height;
+    const feito = Math.min(Math.max(innerHeight * 0.6 - r.top, 0), total);
+    fill.style.height = feito + 'px';
+  }
+  addEventListener('scroll', aoRolar, { passive: true });
+  addEventListener('resize', aoRolar);
+  aoRolar();
+
+  // petalas e coracoes
+  const caixa = document.getElementById('flutuantes');
+  for (let i = 0; i < 14; i++) {
+    const c = document.createElement('div');
+    c.className = 'flut';
+    c.textContent = i % 3 === 0 ? '♥' : '❀';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.fontSize = (12 + Math.random() * 18) + 'px';
+    c.style.animationDuration = (10 + Math.random() * 10) + 's';
+    c.style.animationDelay = (Math.random() * 12) + 's';
+    caixa.appendChild(c);
+  }
+
+  // contador
+  function atualiza() {
+    const diff = Date.now() - inicio.getTime();
+    document.getElementById('c-dias').textContent = Math.floor(diff / 86400000).toLocaleString('pt-BR');
+    document.getElementById('c-horas').textContent = Math.floor(diff / 3600000).toLocaleString('pt-BR');
+    document.getElementById('c-min').textContent = Math.floor(diff / 60000).toLocaleString('pt-BR');
+  }
+  atualiza(); setInterval(atualiza, 30000);
+</script>
+</body>
+</html>
